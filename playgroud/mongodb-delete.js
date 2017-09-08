@@ -12,7 +12,6 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   // }, (err) => {
   //   console.log('Unable to get todo documents');
   // })
-
   //deleteOne
   // db.collection('Todos').deleteOne({text: 'Eat lunch'}).then((result) =>{
   //   console.log(result.result);
