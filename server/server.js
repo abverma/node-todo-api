@@ -14,7 +14,7 @@ app.post('/todos', (req, res) => {
 
   todo.save()
     .then((doc) => {
-      console.log('Todo saved successfully');
+      //console.log('Todo saved successfully');
       res.send(doc);
     }, (err) => {
       //console.log('Unable to save todo', err);
@@ -30,7 +30,7 @@ app.get('/todos', (req, res) => {
       });
     }, (err) => {
       res.status(400).send(err);
-    })
+    });
 });
 app.listen(3000, () => {
   console.log('Server listening on port 3000...');
