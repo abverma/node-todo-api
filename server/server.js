@@ -3,26 +3,18 @@ console.log('env ****', env);
 if (env === 'development') {
   process.env.PORT = 3000;
   process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
-} else if (env === 'testing') {
+} else if (env === 'test') {
   process.env.PORT = 3000;
   process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest';
 }
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
-const {
-  ObjectId
-} = require('mongodb');
+const {ObjectId} = require('mongodb');
 
-var {
-  mongoose
-} = require('./db/mongoose');
-var {
-  Todo
-} = require('./models/todo');
-var {
-  User
-} = require('./models/user');
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
 
 var app = express();
 const port = process.env.PORT || 3000;
@@ -123,7 +115,27 @@ app.patch('/todos/:id', (req, res) => {
     .catch((err) => {
       res.status(400).send();
     })
-})
+});
+
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+
+  console.log(body);
+
+  var user = new User(body);
+
+  user.save()
+    .then(() =>{
+      return user.generateAuthTokens();
+    })
+    .then((token) => {
+        res.header('x-auth', token).send(user);
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    })
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
 });
